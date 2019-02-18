@@ -41,3 +41,18 @@ def test_lic1_not_met(points, parameters):
     within or on a circle of radius RADIUS1
     """
     assert lic.lic_1(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters, expected",
+    [
+        ([[0, 0], [2, 2], [4, 4]], {"radius1": 3}, True),
+        ([[0, 0], [0, 1], [0, 2]], {"radius1": 3}, False),
+    ],
+)
+def test_lic1_collinear_case(points, parameters, expected):
+    """
+    The results of the lic_1 function should be consistent also when three points
+    are collinear
+    """
+    assert lic.lic_1(points, parameters) is expected
