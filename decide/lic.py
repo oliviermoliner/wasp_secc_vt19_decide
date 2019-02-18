@@ -18,7 +18,7 @@ def lic_0(points, parameters):
     for i in range(len(points) - 1):
         point1 = [points[i][0], points[i][1]]
         point2 = [points[i + 1][0], points[i + 1][1]]
-        dist = math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
+        dist = distance(point1, point2)
         if dist > parameters["length1"]:
             return True
     return False
@@ -44,9 +44,9 @@ def lic_1(points, parameters):
 
         # If a, b and c are the lengths of the sides and A is the area of the given
         # triangle, the radius of the circumscribed circle is given by : R = a*b*c/(4*A)
-        a = math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
-        b = math.sqrt((point3[0] - point1[0]) ** 2 + (point3[1] - point1[1]) ** 2)
-        c = math.sqrt((point2[0] - point3[0]) ** 2 + (point2[1] - point3[1]) ** 2)
+        a = distance(point1, point2)
+        b = distance(point1, point3)
+        c = distance(point2, point3)
         # calculate the semi-perimeter
         s = (a + b + c) / 2
         # calculate the area
@@ -69,3 +69,7 @@ def float_almost_equal(a, b, epsilon=0.00000001):
         return True
     else:
         return False
+
+
+def distance(point1, point2):
+    return math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
