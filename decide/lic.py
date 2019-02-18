@@ -52,6 +52,15 @@ def lic_1(points, parameters):
         A = math.sqrt((s * (s - a) * (s - b) * (s - c)))
         # hence the radius
         R = a * b * c / (A * 4)
-        if R > parameters["radius1"]:
+        if R > parameters["radius1"] and not float_almost_equal(
+            R, parameters["radius1"]
+        ):
             return True
     return False
+
+
+def float_almost_equal(a, b, epsilon=0.00000001):
+    if abs(a - b) < epsilon:
+        return True
+    else:
+        return False
