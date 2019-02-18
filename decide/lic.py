@@ -45,7 +45,7 @@ def lic_1(points, parameters):
         # triangle, the radius of the circumscribed circle is given by : R = a*b*c/(4*A)
         a = math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
         b = math.sqrt((point3[0] - point1[0]) ** 2 + (point3[1] - point1[1]) ** 2)
-        c = math.sqrt((point2[0] - point3[0]) ** 2 + (point3[1] - point1[1]) ** 2)
+        c = math.sqrt((point2[0] - point3[0]) ** 2 + (point2[1] - point3[1]) ** 2)
         # calculate the semi-perimeter
         s = (a + b + c) / 2
         # calculate the area
