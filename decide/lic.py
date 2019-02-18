@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 
 def lic_0(points, parameters):
@@ -50,8 +51,12 @@ def lic_1(points, parameters):
         s = (a + b + c) / 2
         # calculate the area
         A = math.sqrt((s * (s - a) * (s - b) * (s - c)))
-        # hence the radius
-        R = a * b * c / (A * 4)
+        if A == 0:
+            # The points are collinear: R is the longest length
+            R = np.max([a, b, c])
+        else:
+            # calculate the radius
+            R = a * b * c / (A * 4)
         if R > parameters["radius1"] and not float_almost_equal(
             R, parameters["radius1"]
         ):
