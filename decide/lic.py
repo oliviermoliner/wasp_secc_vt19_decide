@@ -64,6 +64,42 @@ def lic_1(points, parameters):
     return False
 
 
+def lic_2(points, parameters):
+    """ Checks whether Launch Interceptor Condition 2 is met
+
+    Determines whether there exists at least one set of three consecutive data points
+    which form an angle such that: angle < (PI − EPSILON) or angle > (PI + EPSILON)
+
+    Args:
+        points (list): List of coordinates of data points
+        parameters (dict): Parameters for the LICs
+
+    Returns
+        bool: True if the condition is met
+    """
+    if parameters["epsilon"] < 0 or parameters["epsilon"] >= math.pi:
+        raise ValueError("EPSILON value outside allowed range")
+    for i in range(len(points) - 2):
+        first_point = [points[i][0], points[i][1]]
+        vertex = [points[i + 1][0], points[i + 1][1]]
+        last_point = [points[i + 2][0], points[i + 2][1]]
+
+        if vertex in (first_point, last_point):
+            # If either the first point or the last point (or both) coincides with the
+            # vertex, the angle is undefined and the LIC is not satisfied by those
+            # three points.
+            continue
+        else:
+            angle = math.atan2(
+                last_point[1] - vertex[1], last_point[0] - vertex[0]
+            ) - math.atan2(first_point[1] - vertex[1], first_point[0] - vertex[0])
+            if angle < 0:
+                angle = angle + 2 * math.pi
+            if not float_almost_equal(math.pi, angle, parameters["epsilon"]):
+                return True
+    return False
+
+
 def float_almost_equal(a, b, epsilon=0.00000001):
     if abs(a - b) < epsilon:
         return True
