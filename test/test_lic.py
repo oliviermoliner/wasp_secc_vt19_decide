@@ -1,4 +1,5 @@
 import pytest
+import math
 
 from decide import lic
 
@@ -56,3 +57,65 @@ def test_lic1_collinear_case(points, parameters, expected):
     are collinear
     """
     assert lic.lic_1(points, parameters) is expected
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 1], [0, 0], [1, 0]], {"epsilon": 0.765}),
+        ([[0, 1], [1, 0], [2, 0]], {"epsilon": 0.21}),
+    ],
+)
+def test_lic2_met(points, parameters):
+    """
+    LIC 2 should be met when three consecutive points form an angle such that :
+    angle < (PI − EPSILON) or angle > (PI + EPSILON)
+    """
+    assert lic.lic_2(points, parameters) is True
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[-1, 0], [0, 0], [1, 0]], {"epsilon": 0.0001}),
+        ([[1, 1], [2, 2], [3, 3]], {"epsilon": 0.0001}),
+        ([[0, 1], [0, 0], [1, 0]], {"epsilon": 1.6}),
+    ],
+)
+def test_lic2_not_met(points, parameters):
+    """
+    LIC 2 should not be met when no set of three consecutive points form an angle such
+    that angle < (PI − EPSILON) or angle > (PI + EPSILON)
+    """
+    assert lic.lic_2(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 0], [0, 0], [2, 2]], {"epsilon": 0.001}),
+        ([[0, 0], [2, 2], [2, 2]], {"epsilon": 0.001}),
+    ],
+)
+def test_lic2_undefined_angle(points, parameters):
+    """
+    LIC 2 should not be met when either the first or last point of the triplet coincide
+    with the vertex
+    """
+    assert lic.lic_2(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[-1, 0], [0, 0], [1, 0]], {"epsilon": -1}),
+        ([[-1, 0], [0, 0], [1, 0]], {"epsilon": math.pi}),
+        ([[-1, 0], [0, 0], [1, 0]], {"epsilon": 3.3}),
+    ],
+)
+def test_lic2_epsilon_value_error(points, parameters):
+    """
+    Allowed values of EPSILON should be between 0 (inclusive) and PI (exclusive)
+    """
+    with pytest.raises(ValueError):
+        lic.lic_2(points, parameters)
