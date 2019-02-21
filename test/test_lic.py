@@ -119,3 +119,22 @@ def test_lic2_epsilon_value_error(points, parameters):
     """
     with pytest.raises(ValueError):
         lic.lic_2(points, parameters)
+
+
+@pytest.mark.parametrize(
+    "point1, point2, point3, expected_area, message",
+    [
+        ([0, 0], [2, 2], [4, 4], 0, "Area should be 0 when points are collinear"),
+        ([0, 0], [2, 0], [4, 0], 0, "Area should be 0 when points are collinear"),
+        ([0, 0], [2, 2], [4, 0], 4, "Area of right isoceles triangle"),
+        ([10, 0], [0, 0], [5, 8.66], 43.3, "Area of equilateral triangle"),
+        ([23, 30], [15, 15], [50, 25], 222.5, "Area of obtuse scalene triangle"),
+    ],
+)
+def test_triangle_area(point1, point2, point3, expected_area, message):
+    """
+    Verify that the triangle_area function returns expected values
+    """
+    assert lic.triangle_area(point1, point2, point3) == pytest.approx(
+        expected_area
+    ), message
