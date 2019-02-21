@@ -97,6 +97,31 @@ def lic_2(points, parameters):
     return False
 
 
+def lic_3(points, parameters):
+    """ Checks whether Launch Interceptor Condition 3 is met
+
+    Determines whether there exists at least one set of three consecutive data points
+    that are the vertices of a triangle with area greater than AREA1
+
+    Args:
+        points (list): List of coordinates of data points
+        parameters (dict): Parameters for the LICs
+
+    Returns
+        bool: True if the condition is met
+    """
+    if parameters["area1"] < 0:
+        raise ValueError("AREA1 value outside allowed range")
+    for i in range(len(points) - 2):
+        point1 = [points[i][0], points[i][1]]
+        point2 = [points[i + 1][0], points[i + 1][1]]
+        point3 = [points[i + 2][0], points[i + 2][1]]
+
+        if triangle_area(point1, point2, point3) > parameters["area1"]:
+            return True
+    return False
+
+
 def float_almost_equal(a, b, epsilon=0.00000001):
     if abs(a - b) < epsilon:
         return True
