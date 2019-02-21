@@ -152,3 +152,28 @@ def triangle_area(point1, point2, point3):
     s = (a + b + c) / 2
     # calculate the area
     return math.sqrt((s * (s - a) * (s - b) * (s - c)))
+
+
+def quadrant(point):
+    """ Determines which quadrant a point lies in
+
+    Where there is ambiguity as to which quadrant contains a given point, priority of
+    decision will be by quadrant number, i.e., I, II, III, IV
+
+    Args:
+        point (list): Coordinates of the point
+
+    Returns
+        int: The quadrant number (1-4)
+    """
+    if point[0] >= 0.0 and point[1] >= 0.0:
+        return 1
+
+    if point[0] <= 0.0 and point[1] >= 0.0:
+        return 2
+
+    if point[0] <= 0.0 and point[1] <= 0.0:
+        return 3
+
+    if point[0] >= 0.0 and point[1] <= 0.0:
+        return 4
