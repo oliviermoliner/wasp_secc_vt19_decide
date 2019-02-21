@@ -47,10 +47,7 @@ def lic_1(points, parameters):
         a = distance(point1, point2)
         b = distance(point1, point3)
         c = distance(point2, point3)
-        # calculate the semi-perimeter
-        s = (a + b + c) / 2
-        # calculate the area
-        A = math.sqrt((s * (s - a) * (s - b) * (s - c)))
+        A = triangle_area(point1, point2, point3)
         if A == 0:
             # The points are collinear: R is the longest length
             R = np.max([a, b, c])
@@ -109,3 +106,24 @@ def float_almost_equal(a, b, epsilon=0.00000001):
 
 def distance(point1, point2):
     return math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
+
+
+def triangle_area(point1, point2, point3):
+    """ Calculates the area of a triangle using Heron's formula
+    Args:
+        point1 (float): First vertex of the triangle
+        point2 (float): Second vertex of the triangle
+        point3 (float): Third vertex of the triangle
+
+    Returns
+        float: The area
+
+    """
+    a = distance(point1, point2)
+    b = distance(point1, point3)
+    c = distance(point2, point3)
+
+    # calculate the semi-perimeter
+    s = (a + b + c) / 2
+    # calculate the area
+    return math.sqrt((s * (s - a) * (s - b) * (s - c)))
