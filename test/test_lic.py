@@ -122,6 +122,48 @@ def test_lic2_epsilon_value_error(points, parameters):
 
 
 @pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[23, 30], [15, 15], [50, 25]], {"area1": 200}),
+        ([[10, 0], [0, 0], [5, 8.66]], {"area1": 43}),
+    ],
+)
+def test_lic3_met(points, parameters):
+    """
+    LIC 3 should be met when three consecutive points are the vertices of a triangle
+    with area greater than AREA1
+    """
+    assert lic.lic_3(points, parameters) is True
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 0], [2, 2], [4, 4]], {"area1": 0.0001}),  # Collinear points
+        ([[0, 0], [2, 0], [4, 0]], {"area1": 0.0001}),  # Collinear points
+        ([[10, 0], [0, 0], [5, 8.66]], {"area1": 44}),
+    ],
+)
+def test_lic3_not_met(points, parameters):
+    """
+    LIC 3 should not be met when no set of three consecutive points are the vertices of a triangle
+    with area greater than AREA1
+    """
+    assert lic.lic_3(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters", [([[-1, 0], [0, 0], [1, 0]], {"area1": -1})]
+)
+def test_lic3_area1_value_error(points, parameters):
+    """
+    AREA1 should be greater or equal than 0
+    """
+    with pytest.raises(ValueError):
+        lic.lic_3(points, parameters)
+
+
+@pytest.mark.parametrize(
     "point1, point2, point3, expected_area, message",
     [
         ([0, 0], [2, 2], [4, 4], 0, "Area should be 0 when points are collinear"),
