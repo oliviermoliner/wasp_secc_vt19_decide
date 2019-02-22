@@ -12,7 +12,7 @@ EXTRAS_REQUIRE = {
     "testing": ["pytest"],
     "lint": ["black==18.9b0", "pre-commit==1.14.3"],
 }
-EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["lint"]
+EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["testing"] + EXTRAS_REQUIRE["lint"]
 
 
 setup(
