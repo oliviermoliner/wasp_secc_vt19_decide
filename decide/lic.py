@@ -16,9 +16,9 @@ def lic_0(points, parameters):
         bool: True if the condition is met
     """
     for i in range(len(points) - 1):
-        point1 = [points[i][0], points[i][1]]
-        point2 = [points[i + 1][0], points[i + 1][1]]
-        dist = distance(point1, point2)
+        point1 = Point(points[i])
+        point2 = Point(points[i + 1])
+        dist = point1.distance(point2)
         if dist > parameters["length1"]:
             return True
     return False
@@ -38,15 +38,15 @@ def lic_1(points, parameters):
         bool: True if the condition is met
     """
     for i in range(len(points) - 2):
-        point1 = [points[i][0], points[i][1]]
-        point2 = [points[i + 1][0], points[i + 1][1]]
-        point3 = [points[i + 2][0], points[i + 2][1]]
+        point1 = Point(points[i])
+        point2 = Point(points[i + 1])
+        point3 = Point(points[i + 2])
 
         # If a, b and c are the lengths of the sides and A is the area of the given
         # triangle, the radius of the circumscribed circle is given by : R = a*b*c/(4*A)
-        a = distance(point1, point2)
-        b = distance(point1, point3)
-        c = distance(point2, point3)
+        a = point1.distance(point2)
+        b = point1.distance(point3)
+        c = point2.distance(point3)
         A = triangle_area(point1, point2, point3)
         if A == 0:
             # The points are collinear: R is the longest length
@@ -77,9 +77,9 @@ def lic_2(points, parameters):
     if parameters["epsilon"] < 0 or parameters["epsilon"] >= math.pi:
         raise ValueError("EPSILON value outside allowed range")
     for i in range(len(points) - 2):
-        first_point = [points[i][0], points[i][1]]
-        vertex = [points[i + 1][0], points[i + 1][1]]
-        last_point = [points[i + 2][0], points[i + 2][1]]
+        first_point = Point(points[i])
+        vertex = Point(points[i + 1])
+        last_point = Point(points[i + 2])
 
         if vertex in (first_point, last_point):
             # If either the first point or the last point (or both) coincides with the
@@ -88,8 +88,8 @@ def lic_2(points, parameters):
             continue
         else:
             angle = math.atan2(
-                last_point[1] - vertex[1], last_point[0] - vertex[0]
-            ) - math.atan2(first_point[1] - vertex[1], first_point[0] - vertex[0])
+                last_point.y - vertex.y, last_point.x - vertex.x
+            ) - math.atan2(first_point.y - vertex.y, first_point.x - vertex.x)
             if angle < 0:
                 angle = angle + 2 * math.pi
             if not float_almost_equal(math.pi, angle, parameters["epsilon"]):
@@ -113,9 +113,9 @@ def lic_3(points, parameters):
     if parameters["area1"] < 0:
         raise ValueError("AREA1 value outside allowed range")
     for i in range(len(points) - 2):
-        point1 = [points[i][0], points[i][1]]
-        point2 = [points[i + 1][0], points[i + 1][1]]
-        point3 = [points[i + 2][0], points[i + 2][1]]
+        point1 = Point(points[i])
+        point2 = Point(points[i + 1])
+        point3 = Point(points[i + 2])
 
         if triangle_area(point1, point2, point3) > parameters["area1"]:
             return True
@@ -144,8 +144,9 @@ def lic_4(points, parameters):
     quadrants_list = [None] * parameters["q_pts"]
 
     for i in range(len(points)):
+        point = Point(points[i])
         # Add the quadrant id of the current point to the rolling list
-        quadrants_list[i % parameters["q_pts"]] = quadrant([points[i][0], points[i][1]])
+        quadrants_list[i % parameters["q_pts"]] = point.quadrant()
         # Count the number of unique quadrants in the list
         num_quads = len(
             set([value for idx, value in enumerate(quadrants_list, 1) if value])
@@ -163,10 +164,6 @@ def float_almost_equal(a, b, epsilon=0.00000001):
         return False
 
 
-def distance(point1, point2):
-    return math.sqrt((point2[0] - point1[0]) ** 2 + (point2[1] - point1[1]) ** 2)
-
-
 def triangle_area(point1, point2, point3):
     """ Calculates the area of a triangle using Heron's formula
     Args:
@@ -178,9 +175,9 @@ def triangle_area(point1, point2, point3):
         float: The area
 
     """
-    a = distance(point1, point2)
-    b = distance(point1, point3)
-    c = distance(point2, point3)
+    a = point1.distance(point2)
+    b = point1.distance(point3)
+    c = point2.distance(point3)
 
     # calculate the semi-perimeter
     s = (a + b + c) / 2
@@ -188,26 +185,48 @@ def triangle_area(point1, point2, point3):
     return math.sqrt((s * (s - a) * (s - b) * (s - c)))
 
 
-def quadrant(point):
-    """ Determines which quadrant a point lies in
+class Point:
+    """Point class
 
-    Where there is ambiguity as to which quadrant contains a given point, priority of
-    decision will be by quadrant number, i.e., I, II, III, IV
-
-    Args:
-        point (list): Coordinates of the point
-
-    Returns
-        int: The quadrant number (1-4)
+    Attributes:
+        coordinates (list): [x,y] coordinates of the point
     """
-    if point[0] >= 0.0 and point[1] >= 0.0:
-        return 1
 
-    if point[0] <= 0.0 and point[1] >= 0.0:
-        return 2
+    def __init__(self, coordinates):
+        self.x = coordinates[0]
+        self.y = coordinates[1]
 
-    if point[0] <= 0.0 and point[1] <= 0.0:
-        return 3
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
-    if point[0] >= 0.0 and point[1] <= 0.0:
-        return 4
+    def quadrant(self):
+        """ Determines which quadrant the point lies in
+
+        Where there is ambiguity as to which quadrant contains a given point, priority
+        of decision will be by quadrant number, i.e., I, II, III, IV
+
+        Returns
+            int: The quadrant number (1-4)
+        """
+        if self.x >= 0.0 and self.y >= 0.0:
+            return 1
+
+        if self.x <= 0.0 and self.y >= 0.0:
+            return 2
+
+        if self.x <= 0.0 and self.y <= 0.0:
+            return 3
+
+        if self.x >= 0.0 and self.y <= 0.0:
+            return 4
+
+    def distance(self, other_point):
+        """ Determines the distance to another point
+
+        Args:
+            other_point (Point): The other point
+
+        Returns
+            float: The distance
+        """
+        return math.sqrt((other_point.x - self.x) ** 2 + (other_point.y - self.y) ** 2)
