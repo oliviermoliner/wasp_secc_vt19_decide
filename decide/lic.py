@@ -47,7 +47,8 @@ def lic_1(points, parameters):
         a = point1.distance(point2)
         b = point1.distance(point3)
         c = point2.distance(point3)
-        A = triangle_area(point1, point2, point3)
+        triangle = Triangle(point1, point2, point3)
+        A = triangle.triangle_area()
         if A == 0:
             # The points are collinear: R is the longest length
             R = np.max([a, b, c])
@@ -113,11 +114,11 @@ def lic_3(points, parameters):
     if parameters["area1"] < 0:
         raise ValueError("AREA1 value outside allowed range")
     for i in range(len(points) - 2):
-        point1 = Point(points[i])
-        point2 = Point(points[i + 1])
-        point3 = Point(points[i + 2])
+        triangle = Triangle(
+            Point(points[i]), Point(points[i + 1]), Point(points[i + 2])
+        )
 
-        if triangle_area(point1, point2, point3) > parameters["area1"]:
+        if triangle.triangle_area() > parameters["area1"]:
             return True
     return False
 
@@ -162,27 +163,6 @@ def float_almost_equal(a, b, epsilon=0.00000001):
         return True
     else:
         return False
-
-
-def triangle_area(point1, point2, point3):
-    """ Calculates the area of a triangle using Heron's formula
-    Args:
-        point1 (float): First vertex of the triangle
-        point2 (float): Second vertex of the triangle
-        point3 (float): Third vertex of the triangle
-
-    Returns
-        float: The area
-
-    """
-    a = point1.distance(point2)
-    b = point1.distance(point3)
-    c = point2.distance(point3)
-
-    # calculate the semi-perimeter
-    s = (a + b + c) / 2
-    # calculate the area
-    return math.sqrt((s * (s - a) * (s - b) * (s - c)))
 
 
 class Point:
@@ -230,3 +210,37 @@ class Point:
             float: The distance
         """
         return math.sqrt((other_point.x - self.x) ** 2 + (other_point.y - self.y) ** 2)
+
+
+class Triangle:
+    """Triangle class
+
+    Attributes:
+        a (Point): first vertex
+        b (Point): second vertex
+        c (Point): third vertex
+    """
+
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+        self._area = None
+
+    def triangle_area(self):
+        """ Calculates the area of the triangle using Heron's formula
+
+        Returns
+            float: The area
+
+        """
+        if self._area is None:
+            a = self.a.distance(self.b)
+            b = self.a.distance(self.c)
+            c = self.b.distance(self.c)
+
+            # calculate the semi-perimeter
+            s = (a + b + c) / 2
+            # calculate the area
+            self._area = math.sqrt((s * (s - a) * (s - b) * (s - c)))
+        return self._area
