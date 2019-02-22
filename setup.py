@@ -6,9 +6,14 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.md")) as f:
     README = f.read()
 
-requires = ["numpy"]
+INSTALL_REQUIRES = ["numpy"]
 
-tests_require = ["pytest"]
+EXTRAS_REQUIRE = {
+    "testing": ["pytest"],
+    "lint": ["black==18.9b0", "pre-commit==1.14.3"],
+}
+EXTRAS_REQUIRE["dev"] = EXTRAS_REQUIRE["tests"] + EXTRAS_REQUIRE["lint"]
+
 
 setup(
     name="decide",
@@ -23,6 +28,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    extras_require={"testing": tests_require},
-    install_requires=requires,
+    extras_require=EXTRAS_REQUIRE,
+    install_requires=INSTALL_REQUIRES,
 )
