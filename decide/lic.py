@@ -38,23 +38,10 @@ def lic_1(points, parameters):
         bool: True if the condition is met
     """
     for i in range(len(points) - 2):
-        point1 = Point(points[i])
-        point2 = Point(points[i + 1])
-        point3 = Point(points[i + 2])
-
-        # If a, b and c are the lengths of the sides and A is the area of the given
-        # triangle, the radius of the circumscribed circle is given by : R = a*b*c/(4*A)
-        a = point1.distance(point2)
-        b = point1.distance(point3)
-        c = point2.distance(point3)
-        triangle = Triangle(point1, point2, point3)
-        A = triangle.area()
-        if A == 0:
-            # The points are collinear: R is the longest length
-            R = np.max([a, b, c])
-        else:
-            # calculate the radius
-            R = a * b * c / (A * 4)
+        triangle = Triangle(
+            Point(points[i]), Point(points[i + 1]), Point(points[i + 2])
+        )
+        R = triangle.circumradius()
         if R > parameters["radius1"] and not float_almost_equal(
             R, parameters["radius1"]
         ):
@@ -240,6 +227,27 @@ class Triangle:
             # calculate the area
             self._area = math.sqrt((s * (s - length1) * (s - length2) * (s - length3)))
         return self._area
+
+    def circumradius(self):
+        """ Calculates the radius of the smallest circle containing this Triangle
+
+        If a, b and c are the lengths of the sides and A is the area of the given
+        triangle, the radius of the circumscribed circle is given by : R = a*b*c/(4*A)
+
+        Returns
+            float: The radius
+        """
+        length1 = self.a.distance(self.b)
+        length2 = self.a.distance(self.c)
+        length3 = self.b.distance(self.c)
+
+        if self.area() == 0:
+            # The points are collinear: R is the longest length
+            R = np.max([length1, length2, length3])
+        else:
+            # calculate the radius
+            R = length1 * length2 * length3 / (self.area() * 4)
+        return R
 
     def angle_abc(self):
         """ Calculates the angle of the triangle at vertex b
