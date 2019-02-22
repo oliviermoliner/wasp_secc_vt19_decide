@@ -88,11 +88,7 @@ def lic_2(points, parameters):
             # three points.
             continue
         else:
-            angle = math.atan2(
-                last_point.y - vertex.y, last_point.x - vertex.x
-            ) - math.atan2(first_point.y - vertex.y, first_point.x - vertex.x)
-            if angle < 0:
-                angle = angle + 2 * math.pi
+            angle = Triangle(first_point, vertex, last_point).angle_abc()
             if not float_almost_equal(math.pi, angle, parameters["epsilon"]):
                 return True
     return False
@@ -244,3 +240,17 @@ class Triangle:
             # calculate the area
             self._area = math.sqrt((s * (s - length1) * (s - length2) * (s - length3)))
         return self._area
+
+    def angle_abc(self):
+        """ Calculates the angle of the triangle at vertex b
+
+        Returns
+            float: The angle (0 - 2*PI)
+
+        """
+        angle = math.atan2(self.c.y - self.b.y, self.c.x - self.b.x) - math.atan2(
+            self.a.y - self.b.y, self.a.x - self.b.x
+        )
+        if angle < 0:
+            angle = angle + 2 * math.pi
+        return angle
