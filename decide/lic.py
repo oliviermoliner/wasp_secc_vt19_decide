@@ -48,7 +48,7 @@ def lic_1(points, parameters):
         b = point1.distance(point3)
         c = point2.distance(point3)
         triangle = Triangle(point1, point2, point3)
-        A = triangle.triangle_area()
+        A = triangle.area()
         if A == 0:
             # The points are collinear: R is the longest length
             R = np.max([a, b, c])
@@ -118,7 +118,7 @@ def lic_3(points, parameters):
             Point(points[i]), Point(points[i + 1]), Point(points[i + 2])
         )
 
-        if triangle.triangle_area() > parameters["area1"]:
+        if triangle.area() > parameters["area1"]:
             return True
     return False
 
@@ -227,7 +227,7 @@ class Triangle:
         self.c = c
         self._area = None
 
-    def triangle_area(self):
+    def area(self):
         """ Calculates the area of the triangle using Heron's formula
 
         Returns

@@ -242,7 +242,7 @@ def test_triangle_area(point1, point2, point3, expected_area, message):
     Verify that the triangle_area function returns expected values
     """
     triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
-    assert triangle.triangle_area() == pytest.approx(expected_area), message
+    assert triangle.area() == pytest.approx(expected_area), message
 
 
 @pytest.mark.parametrize(
