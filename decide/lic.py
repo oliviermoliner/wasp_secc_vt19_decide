@@ -235,12 +235,12 @@ class Triangle:
 
         """
         if self._area is None:
-            a = self.a.distance(self.b)
-            b = self.a.distance(self.c)
-            c = self.b.distance(self.c)
+            length1 = self.a.distance(self.b)
+            length2 = self.a.distance(self.c)
+            length3 = self.b.distance(self.c)
 
             # calculate the semi-perimeter
-            s = (a + b + c) / 2
+            s = (length1 + length2 + length3) / 2
             # calculate the area
-            self._area = math.sqrt((s * (s - a) * (s - b) * (s - c)))
+            self._area = math.sqrt((s * (s - length1) * (s - length2) * (s - length3)))
         return self._area
