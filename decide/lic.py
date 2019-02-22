@@ -122,6 +122,40 @@ def lic_3(points, parameters):
     return False
 
 
+def lic_4(points, parameters):
+    """ Checks whether Launch Interceptor Condition 4 is met
+
+    Determines whether there exists at least one set of Q_PTS consecutive data points
+    that lie in more than QUADS quadrants.
+
+    Args:
+        points (list): List of coordinates of data points
+        parameters (dict): Parameters for the LICs
+
+    Returns
+        bool: True if the condition is met
+    """
+    if parameters["q_pts"] < 2 or parameters["q_pts"] > len(points):
+        raise ValueError("Q_PTS value outside allowed range")
+    if parameters["quads"] < 1 or parameters["quads"] > 3:
+        raise ValueError("QUADS value outside allowed range")
+
+    # Rolling list containing the quadrant ids of the latest Q_PTS points
+    quadrants_list = [None] * parameters["q_pts"]
+
+    for i in range(len(points)):
+        # Add the quadrant id of the current point to the rolling list
+        quadrants_list[i % parameters["q_pts"]] = quadrant([points[i][0], points[i][1]])
+        # Count the number of unique quadrants in the list
+        num_quads = len(
+            set([value for idx, value in enumerate(quadrants_list, 1) if value])
+        )
+
+        if num_quads > parameters["quads"]:
+            return True
+    return False
+
+
 def float_almost_equal(a, b, epsilon=0.00000001):
     if abs(a - b) < epsilon:
         return True
