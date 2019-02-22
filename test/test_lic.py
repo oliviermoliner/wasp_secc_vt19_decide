@@ -164,6 +164,70 @@ def test_lic3_area1_value_error(points, parameters):
 
 
 @pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[1, 1], [1, 1], [1, 1], [1, -1], [1, -1]], {"q_pts": 3, "quads": 1}),
+        ([[1, 1], [1, 1], [1, 1], [1, -1], [1, -1]], {"q_pts": 5, "quads": 1}),
+        ([[1, 1], [1, -1], [-1, -1], [-1, 1], [1, 1]], {"q_pts": 4, "quads": 3}),
+    ],
+)
+def test_lic4_met(points, parameters):
+    """
+    LIC 4 should be met when at least Q_PTS consecutive data points lie in more than
+    QUADS quadrants
+    """
+    assert lic.lic_4(points, parameters) is True
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        # All points lie in the same quadrant
+        ([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1]], {"q_pts": 2, "quads": 1}),
+        ([[1, 1], [1, 1], [1, 1], [1, -1], [1, -1]], {"q_pts": 5, "quads": 2}),
+        # If Q_PTS <= QUADS: the condition can never be met
+        ([[1, 1], [1, -1], [-1, -1], [-1, 1], [1, 1]], {"q_pts": 2, "quads": 3}),
+    ],
+)
+def test_lic4_not_met(points, parameters):
+    """
+    LIC 4 should not be met when no set of Q_PTS consecutive points lie in more than
+    QUADS quadrants
+    """
+    assert lic.lic_4(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1]], {"q_pts": 1, "quads": 1}),
+        ([[1, 1], [1, 1]], {"q_pts": 3, "quads": 1}),
+    ],
+)
+def test_lic4_q_pts_value_error(points, parameters):
+    """
+    Allowed values of Q_PTS should be between 2 (inclusive) and NUMPOINTS (inclusive)
+    """
+    with pytest.raises(ValueError):
+        lic.lic_4(points, parameters)
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[1, 1], [1, 1], [1, 1], [1, 1], [1, 1]], {"q_pts": 1, "quads": 4}),
+        ([[1, 1], [1, 1]], {"q_pts": 2, "quads": 0}),
+    ],
+)
+def test_lic4_quads_value_error(points, parameters):
+    """
+    Allowed values of QUADS should be between 1 (inclusive) and 3 (inclusive)
+    """
+    with pytest.raises(ValueError):
+        lic.lic_4(points, parameters)
+
+
+@pytest.mark.parametrize(
     "point1, point2, point3, expected_area, message",
     [
         ([0, 0], [2, 2], [4, 4], 0, "Area should be 0 when points are collinear"),
