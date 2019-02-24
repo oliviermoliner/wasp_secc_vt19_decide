@@ -252,3 +252,62 @@ def test_lic5_not_met(points, parameters):
     monotonically
     """
     assert lic.lic_5(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 0], [1, 2], [3, 0]], {"n_pts": 3, "dist": 0}),
+        ([[0, 0], [2, 2], [0, 0]], {"n_pts": 3, "dist": 1}),
+        ([[0, 0], [1, 1], [2, 2], [0, 3]], {"n_pts": 4, "dist": 1.5}),
+    ],
+)
+def test_lic6_met(points, parameters):
+    """
+    LIC 6 should be met when there exists N_PTS consecutive data points such that at
+    least one of the points lies a distance greater than DIST from the line joining
+    the first and last of these N_PTS points
+
+    """
+    assert lic.lic_6(points, parameters) is True
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 0], [1, 1]], {"n_pts": 2, "dist": 1}),
+        ([[0, 0], [1, 2], [2, 0]], {"n_pts": 2, "dist": 1}),
+        ([[0, 0], [1, 2], [3, 0]], {"n_pts": 3, "dist": 3}),
+        ([[0, 0], [1, 1], [2, 2]], {"n_pts": 3, "dist": 0}),
+    ],
+)
+def test_lic6_not_met(points, parameters):
+    """
+    LIC 6 should not be met when no set of lie a distance greater than DIST from the
+    line joining the first and last point, or when NUMPOINTS<3
+    """
+    assert lic.lic_6(points, parameters) is False
+
+
+@pytest.mark.parametrize(
+    "points,parameters", [([[0, 0], [2, 2], [0, 0]], {"n_pts": 4, "dist": 1})]
+)
+def test_lic6_n_pts_value_error(points, parameters):
+    """
+    Allowed values of N_PTS should be between 3 (inclusive) and NUMPOINTS (inclusive)
+    But when N_PTS < 3 the function fails graciously (returns False) instead of raising
+    an error
+    """
+    with pytest.raises(ValueError):
+        lic.lic_6(points, parameters)
+
+
+@pytest.mark.parametrize(
+    "points,parameters", [([[0, 0], [2, 2], [0, 0]], {"n_pts": 3, "dist": -1})]
+)
+def test_lic6_dist_value_error(points, parameters):
+    """
+    DIST parameter shall be positive
+    """
+    with pytest.raises(ValueError):
+        lic.lic_6(points, parameters)
