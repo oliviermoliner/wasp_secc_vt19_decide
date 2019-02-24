@@ -141,6 +141,25 @@ def lic_4(points, parameters):
     return False
 
 
+def lic_5(points, parameters):
+    """ Checks whether Launch Interceptor Condition 5 is met
+
+    Determines whether there exists at least one set of two consecutive data points,
+    (X[i],Y[i]) and (X[j],Y[j]), such that X[j] - X[i] < 0. (where i = j-1)
+
+    Args:
+        points (list): List of coordinates of data points
+        parameters (dict): Parameters for the LICs
+
+    Returns
+        bool: True if the condition is met
+    """
+    for i in range(len(points) - 1):
+        if Point(points[i + 1]).x < Point(points[i]).x:
+            return True
+    return False
+
+
 def float_almost_equal(a, b, epsilon=0.00000001):
     if abs(a - b) < epsilon:
         return True
