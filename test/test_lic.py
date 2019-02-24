@@ -243,3 +243,22 @@ def test_triangle_area(point1, point2, point3, expected_area, message):
     """
     triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
     assert triangle.area() == pytest.approx(expected_area), message
+
+
+@pytest.mark.parametrize(
+    "point1, point2, point3, expected_radius",
+    [
+        ([0, 0], [1, 0], [0.5, 0.86602539], 0.5773502645948126),
+        ([0, 0], [1, 0], [0.5, 10], 5.0125),
+        ([0, 0], [0, 4], [2, 2], 2),
+        ([0, 0], [1, 0], [10, 2], 23.50531854708608),
+        ([0, 0], [2, 2], [4, 4], math.sqrt(32)),
+        ([0, 0], [0, 1], [0, 2], 2),
+    ],
+)
+def test_triangle_circumradius(point1, point2, point3, expected_radius):
+    """
+    Verify that the triangle_area function returns expected values
+    """
+    triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
+    assert triangle.circumradius() == pytest.approx(expected_radius)
