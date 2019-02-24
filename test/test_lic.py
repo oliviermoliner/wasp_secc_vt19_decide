@@ -262,3 +262,24 @@ def test_triangle_circumradius(point1, point2, point3, expected_radius):
     """
     triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
     assert triangle.circumradius() == pytest.approx(expected_radius)
+
+
+@pytest.mark.parametrize(
+    "point1, point2, point3, expected_angle",
+    [
+        ([0, 1], [0, 0], [1, 0], 3 * math.pi / 2),
+        ([0, 1], [1, 0], [2, 0], 5 * math.pi / 4),
+        ([-1, 0], [0, 0], [1, 0], math.pi),
+        ([1, 1], [2, 2], [3, 3], math.pi),
+        ([0, 1], [0, 0], [1, 0], 3 * math.pi / 2),
+        ([-1, 0], [0, 0], [1, 0], math.pi),
+        ([-1, 0], [0, 0], [1, 0], math.pi),
+        ([-1, 0], [0, 0], [1, 0], math.pi),
+    ],
+)
+def test_triangle_angle_abc(point1, point2, point3, expected_angle):
+    """
+    Verify that the angle_abc function returns expected values
+    """
+    triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
+    assert triangle.angle_abc() == pytest.approx(expected_angle)
