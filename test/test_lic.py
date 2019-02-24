@@ -225,3 +225,30 @@ def test_lic4_quads_value_error(points, parameters):
     """
     with pytest.raises(ValueError):
         lic.lic_4(points, parameters)
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [
+        ([[0, 0], [1, 0], [0.5, 0.86602539]], {}),
+        ([[0, 0], [1, 0], [2, 10], [1, 10]], {}),
+    ],
+)
+def test_lic5_met(points, parameters):
+    """
+    LIC 5 should be met when there exists at least one set of two consecutive data
+    points, (X[i],Y[i]) and (X[j],Y[j]), such that X[j] - X[i] < 0. (where i = j-1)
+    """
+    assert lic.lic_5(points, parameters) is True
+
+
+@pytest.mark.parametrize(
+    "points,parameters",
+    [([[0, 0], [1, 4], [2, 2]], {}), ([[0, 0], [0, -1], [0, -2]], {})],
+)
+def test_lic5_not_met(points, parameters):
+    """
+    LIC 5 should not be met when the x-coordinates of the points in the list increase
+    monotonically
+    """
+    assert lic.lic_5(points, parameters) is False
