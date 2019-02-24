@@ -179,12 +179,14 @@ class LaunchInterceptorConditions:
         if self.parameters["dist"] < 0:
             raise ValueError("DIST value outside allowed range")
 
-        for i in range(len(points) - self.parameters["n_pts"] + 1):
+        n_pts = self.parameters["n_pts"]
+
+        for i in range(len(points) - n_pts + 1):
             start_point = Point(points[i])
-            end_point = Point(points[i + self.parameters["n_pts"] - 1])
+            end_point = Point(points[i + n_pts - 1])
 
             if start_point == end_point:
-                for j in range(1, self.parameters["n_pts"] - 1):
+                for j in range(1, n_pts - 1):
                     dist = start_point.distance(Point(points[i + j]))
                     if dist > self.parameters["dist"]:
                         return True
@@ -198,7 +200,7 @@ class LaunchInterceptorConditions:
                 and h is the height we want to find. Thus h = 2*A / b.
                 """
                 b = start_point.distance(end_point)
-                for j in range(1, self.parameters["n_pts"] - 1):
+                for j in range(1, n_pts - 1):
                     triangle = Triangle(start_point, end_point, Point(points[i + j]))
                     h = 2 * triangle.area() / b
                     if h > self.parameters["dist"]:
