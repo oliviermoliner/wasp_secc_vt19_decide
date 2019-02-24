@@ -255,3 +255,16 @@ def test_quadrant(coordinates, expected_quadrant):
     """
     point = lic.Point(coordinates)
     assert point.quadrant() == expected_quadrant
+
+
+@pytest.mark.parametrize(
+    "point1, point2, expected_distance",
+    [([0, 0], [0, 0], 0), ([-1, 0], [0, 0], 1), ([-1, -1], [1, 1], math.sqrt(8))],
+)
+def test_distance(point1, point2, expected_distance):
+    """
+    Verify that the distance function returns expected values
+    """
+    assert lic.Point(point1).distance(lic.Point(point2)) == pytest.approx(
+        expected_distance
+    )
