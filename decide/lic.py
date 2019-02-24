@@ -160,6 +160,58 @@ def lic_5(points, parameters):
     return False
 
 
+def lic_6(points, parameters):
+    """ Checks whether Launch Interceptor Condition 6 is met
+
+    Determines whether there exists  at least one set of N PTS consecutive data points
+    such that at least one of the points lies a distance greater than DIST from the
+    line joining the first and last of these N PTS points. If the first and last points
+    of these N PTS are identical, then the calculated distance to compare with DIST
+    will be the distance from the coincident point to all other points of the N PTS
+    consecutive points. The condition is not met when NUMPOINTS < 3
+
+    Args:
+        points (list): List of coordinates of data points
+        parameters (dict): Parameters for the LICs
+
+    Returns
+        bool: True if the condition is met
+    """
+    if parameters["n_pts"] > len(points):
+        raise ValueError("N_PTS value outside allowed range")
+    if parameters["dist"] < 0:
+        raise ValueError("DIST value outside allowed range")
+
+    for i in range(len(points) - parameters["n_pts"] + 1):
+        start_point = Point(points[i])
+        end_point = Point(points[i + parameters["n_pts"] - 1])
+
+        if start_point == end_point:
+            for j in range(1, parameters["n_pts"] - 1):
+                dist = start_point.distance(Point(points[i + j]))
+                if dist > parameters["dist"]:
+                    return True
+        else:
+            """
+            If the points are distinct, the distance from a point P to the line defined
+            by start_point and end_point is the perpendicular height from P of the
+            triangle defined by P, start_point and end_point.
+            The standard formula of the area of the triangle is A = (b*h)/2, where b
+            is the length of the base (i.e. the distance between start_point and end_point),
+            and h is the height we want to find. Thus h = 2*A / b.
+            """
+            b = start_point.distance(end_point)
+            for j in range(1, parameters["n_pts"] - 1):
+                triangle = Triangle(start_point, end_point, Point(points[i + j]))
+                h = 2 * triangle.area() / b
+                if h > parameters["dist"]:
+                    return True
+
+        if Point(points[i + 1]).x < Point(points[i]).x:
+            return True
+    return False
+
+
 def float_almost_equal(a, b, epsilon=0.00000001):
     if abs(a - b) < epsilon:
         return True
