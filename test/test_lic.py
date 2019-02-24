@@ -6,12 +6,14 @@ from decide import lic
 
 def test_lic0_met():
     """LIC 0 should be met when two consecutive points are more than LENGTH1 apart"""
-    assert lic.lic_0([[0, 0], [1, 1], [3, 3]], {"length1": 2}) is True
+    lauch_conditions = lic.LaunchInterceptorConditions({"length1": 2})
+    assert lauch_conditions.lic_0([[0, 0], [1, 1], [3, 3]]) is True
 
 
 def test_lic0_not_met():
     """LIC 0 should not be met when no consecutive points are more than LENGTH1 apart"""
-    assert lic.lic_0([[0, 0], [1, 1], [2, 2]], {"length1": 2}) is False
+    lauch_conditions = lic.LaunchInterceptorConditions({"length1": 2})
+    assert lauch_conditions.lic_0([[0, 0], [1, 1], [2, 2]]) is False
 
 
 @pytest.mark.parametrize(
@@ -26,7 +28,8 @@ def test_lic1_met(points, parameters):
     LIC 1 should be met when three consecutive points cannot all be contained within
     or on a circle of radius RADIUS1
     """
-    assert lic.lic_1(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_1(points) is True
 
 
 @pytest.mark.parametrize(
@@ -41,7 +44,8 @@ def test_lic1_not_met(points, parameters):
     LIC 1 should not be met when all sets of three consecutive points can becontained
     within or on a circle of radius RADIUS1
     """
-    assert lic.lic_1(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_1(points) is False
 
 
 @pytest.mark.parametrize(
@@ -56,7 +60,8 @@ def test_lic1_collinear_case(points, parameters, expected):
     The results of the lic_1 function should be consistent also when three points
     are collinear
     """
-    assert lic.lic_1(points, parameters) is expected
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_1(points) is expected
 
 
 @pytest.mark.parametrize(
@@ -71,7 +76,8 @@ def test_lic2_met(points, parameters):
     LIC 2 should be met when three consecutive points form an angle such that :
     angle < (PI − EPSILON) or angle > (PI + EPSILON)
     """
-    assert lic.lic_2(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_2(points) is True
 
 
 @pytest.mark.parametrize(
@@ -87,7 +93,8 @@ def test_lic2_not_met(points, parameters):
     LIC 2 should not be met when no set of three consecutive points form an angle such
     that angle < (PI − EPSILON) or angle > (PI + EPSILON)
     """
-    assert lic.lic_2(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_2(points) is False
 
 
 @pytest.mark.parametrize(
@@ -102,7 +109,8 @@ def test_lic2_undefined_angle(points, parameters):
     LIC 2 should not be met when either the first or last point of the triplet coincide
     with the vertex
     """
-    assert lic.lic_2(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_2(points) is False
 
 
 @pytest.mark.parametrize(
@@ -117,8 +125,9 @@ def test_lic2_epsilon_value_error(points, parameters):
     """
     Allowed values of EPSILON should be between 0 (inclusive) and PI (exclusive)
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_2(points, parameters)
+        lauch_conditions.lic_2(points)
 
 
 @pytest.mark.parametrize(
@@ -133,7 +142,8 @@ def test_lic3_met(points, parameters):
     LIC 3 should be met when three consecutive points are the vertices of a triangle
     with area greater than AREA1
     """
-    assert lic.lic_3(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_3(points) is True
 
 
 @pytest.mark.parametrize(
@@ -149,7 +159,8 @@ def test_lic3_not_met(points, parameters):
     LIC 3 should not be met when no set of three consecutive points are the vertices of a triangle
     with area greater than AREA1
     """
-    assert lic.lic_3(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_3(points) is False
 
 
 @pytest.mark.parametrize(
@@ -159,8 +170,9 @@ def test_lic3_area1_value_error(points, parameters):
     """
     AREA1 should be greater or equal than 0
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_3(points, parameters)
+        lauch_conditions.lic_3(points)
 
 
 @pytest.mark.parametrize(
@@ -176,7 +188,8 @@ def test_lic4_met(points, parameters):
     LIC 4 should be met when at least Q_PTS consecutive data points lie in more than
     QUADS quadrants
     """
-    assert lic.lic_4(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_4(points) is True
 
 
 @pytest.mark.parametrize(
@@ -194,7 +207,8 @@ def test_lic4_not_met(points, parameters):
     LIC 4 should not be met when no set of Q_PTS consecutive points lie in more than
     QUADS quadrants
     """
-    assert lic.lic_4(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_4(points) is False
 
 
 @pytest.mark.parametrize(
@@ -208,8 +222,9 @@ def test_lic4_q_pts_value_error(points, parameters):
     """
     Allowed values of Q_PTS should be between 2 (inclusive) and NUMPOINTS (inclusive)
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_4(points, parameters)
+        lauch_conditions.lic_4(points)
 
 
 @pytest.mark.parametrize(
@@ -223,8 +238,9 @@ def test_lic4_quads_value_error(points, parameters):
     """
     Allowed values of QUADS should be between 1 (inclusive) and 3 (inclusive)
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_4(points, parameters)
+        lauch_conditions.lic_4(points)
 
 
 @pytest.mark.parametrize(
@@ -239,7 +255,8 @@ def test_lic5_met(points, parameters):
     LIC 5 should be met when there exists at least one set of two consecutive data
     points, (X[i],Y[i]) and (X[j],Y[j]), such that X[j] - X[i] < 0. (where i = j-1)
     """
-    assert lic.lic_5(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_5(points) is True
 
 
 @pytest.mark.parametrize(
@@ -251,7 +268,8 @@ def test_lic5_not_met(points, parameters):
     LIC 5 should not be met when the x-coordinates of the points in the list increase
     monotonically
     """
-    assert lic.lic_5(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_5(points) is False
 
 
 @pytest.mark.parametrize(
@@ -269,7 +287,8 @@ def test_lic6_met(points, parameters):
     the first and last of these N_PTS points
 
     """
-    assert lic.lic_6(points, parameters) is True
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_6(points) is True
 
 
 @pytest.mark.parametrize(
@@ -286,7 +305,8 @@ def test_lic6_not_met(points, parameters):
     LIC 6 should not be met when no set of lie a distance greater than DIST from the
     line joining the first and last point, or when NUMPOINTS<3
     """
-    assert lic.lic_6(points, parameters) is False
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.lic_6(points) is False
 
 
 @pytest.mark.parametrize(
@@ -298,8 +318,9 @@ def test_lic6_n_pts_value_error(points, parameters):
     But when N_PTS < 3 the function fails graciously (returns False) instead of raising
     an error
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_6(points, parameters)
+        lauch_conditions.lic_6(points)
 
 
 @pytest.mark.parametrize(
@@ -309,5 +330,6 @@ def test_lic6_dist_value_error(points, parameters):
     """
     DIST parameter shall be positive
     """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
-        lic.lic_6(points, parameters)
+        lauch_conditions.lic_6(points)
