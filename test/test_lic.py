@@ -243,28 +243,3 @@ def test_triangle_area(point1, point2, point3, expected_area, message):
     """
     triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
     assert triangle.area() == pytest.approx(expected_area), message
-
-
-@pytest.mark.parametrize(
-    "coordinates, expected_quadrant",
-    [([0, 0], 1), ([-1, 0], 2), ([0, -1], 3), ([0, 1], 1), ([1, 0], 1), ([1, -1], 4)],
-)
-def test_quadrant(coordinates, expected_quadrant):
-    """
-    Verify that the quadrant function returns expected values
-    """
-    point = lic.Point(coordinates)
-    assert point.quadrant() == expected_quadrant
-
-
-@pytest.mark.parametrize(
-    "point1, point2, expected_distance",
-    [([0, 0], [0, 0], 0), ([-1, 0], [0, 0], 1), ([-1, -1], [1, 1], math.sqrt(8))],
-)
-def test_distance(point1, point2, expected_distance):
-    """
-    Verify that the distance function returns expected values
-    """
-    assert lic.Point(point1).distance(lic.Point(point2)) == pytest.approx(
-        expected_distance
-    )
