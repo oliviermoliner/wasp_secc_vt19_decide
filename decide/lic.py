@@ -206,9 +206,6 @@ def lic_6(points, parameters):
                 h = 2 * triangle.area() / b
                 if h > parameters["dist"]:
                     return True
-
-        if Point(points[i + 1]).x < Point(points[i]).x:
-            return True
     return False
 
 
