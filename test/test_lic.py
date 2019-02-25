@@ -333,3 +333,46 @@ def test_lic6_dist_value_error(points, parameters):
     lauch_conditions = lic.LaunchInterceptorConditions(parameters)
     with pytest.raises(ValueError):
         lauch_conditions.lic_6(points)
+
+
+@pytest.mark.parametrize(
+    "points, parameters, expected_cmv",
+    [
+        (
+            [[0, 0], [1, 0], [2, 0], [3, 0], [3, 3]],
+            {
+                "length1": 2,
+                "epsilon": math.pi / 2,
+                "area1": 2,
+                "radius1": 1,
+                "q_pts": 3,
+                "quads": 1,
+                "n_pts": 3,
+                "dist": 1.5,
+            },
+            [
+                True,
+                True,
+                True,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+            ],
+        )
+    ],
+)
+def test_populate_cmv(points, parameters, expected_cmv):
+    """
+    CMV should be correctly populated for a set of points given the parameters
+    """
+    lauch_conditions = lic.LaunchInterceptorConditions(parameters)
+    assert lauch_conditions.get_conditions_met_vector(points) == expected_cmv
