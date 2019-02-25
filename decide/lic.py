@@ -12,6 +12,30 @@ class LaunchInterceptorConditions:
     def __init__(self, parameters):
         self.parameters = parameters
 
+    def get_conditions_met_vector(self, points):
+        """ Gets the Conditions Met Vector for the data points
+
+        Each element of the Conditions Met Vector (CMV) is set according to the evaluation
+        of each of the Launch Interceptor Conditions (LIC) given the parameter values.
+
+        Args:
+            points (list): List of coordinates of data points
+
+        Returns
+            list: The CMV as a list of booleans
+        """
+        cmv = [False] * 15
+
+        cmv[0] = self.lic_0(points)
+        cmv[1] = self.lic_1(points)
+        cmv[2] = self.lic_2(points)
+        cmv[3] = self.lic_3(points)
+        cmv[4] = self.lic_4(points)
+        cmv[5] = self.lic_5(points)
+        cmv[6] = self.lic_6(points)
+
+        return cmv
+
     def lic_0(self, points):
         """ Checks whether Launch Interceptor Condition 0 is met
 
