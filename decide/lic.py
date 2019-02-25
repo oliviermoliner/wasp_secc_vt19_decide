@@ -3,10 +3,13 @@ import numpy as np
 
 
 class LaunchInterceptorConditions:
-    """
+    """Launch Interceptor Conditions class
 
-            parameters (dict): Parameters for the LICs
+    Contains methods to evaluate each of the Launch Interceptor Conditions (LIC) on
+    data points given the parameter values.
 
+    Attributes:
+        parameters (dict): Parameters for the LICs
     """
 
     def __init__(self, parameters):
