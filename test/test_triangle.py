@@ -1,7 +1,7 @@
 import pytest
 import math
 
-from decide import lic
+from decide import decide
 
 
 @pytest.mark.parametrize(
@@ -18,7 +18,9 @@ def test_triangle_area(point1, point2, point3, expected_area, message):
     """
     Verify that the triangle_area function returns expected values
     """
-    triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
+    triangle = decide.Triangle(
+        decide.Point(point1), decide.Point(point2), decide.Point(point3)
+    )
     assert triangle.area() == pytest.approx(expected_area), message
 
 
@@ -37,7 +39,9 @@ def test_triangle_circumradius(point1, point2, point3, expected_radius):
     """
     Verify that the circumradius function returns expected values
     """
-    triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
+    triangle = decide.Triangle(
+        decide.Point(point1), decide.Point(point2), decide.Point(point3)
+    )
     assert triangle.circumradius() == pytest.approx(expected_radius)
 
 
@@ -58,5 +62,7 @@ def test_triangle_angle_abc(point1, point2, point3, expected_angle):
     """
     Verify that the angle_abc function returns expected values
     """
-    triangle = lic.Triangle(lic.Point(point1), lic.Point(point2), lic.Point(point3))
+    triangle = decide.Triangle(
+        decide.Point(point1), decide.Point(point2), decide.Point(point3)
+    )
     assert triangle.angle_abc() == pytest.approx(expected_angle)

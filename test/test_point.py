@@ -1,7 +1,7 @@
 import pytest
 import math
 
-from decide import lic
+from decide import decide
 
 
 @pytest.mark.parametrize(
@@ -12,7 +12,7 @@ def test_quadrant(coordinates, expected_quadrant):
     """
     Verify that the quadrant function returns expected values
     """
-    point = lic.Point(coordinates)
+    point = decide.Point(coordinates)
     assert point.quadrant() == expected_quadrant
 
 
@@ -24,6 +24,6 @@ def test_distance(point1, point2, expected_distance):
     """
     Verify that the distance function returns expected values
     """
-    assert lic.Point(point1).distance(lic.Point(point2)) == pytest.approx(
+    assert decide.Point(point1).distance(decide.Point(point2)) == pytest.approx(
         expected_distance
     )
