@@ -2,6 +2,21 @@ import math
 import numpy as np
 
 
+class Decide:
+    """Decide class
+
+    Attributes:
+        parameters (dict): Parameters for the LICs
+        lcm (list): Logical Connector Matrix
+        puv (list): Preliminary Unlocking Vector
+    """
+
+    def __init__(self, parameters, lcm, puv):
+        self.parameters = parameters
+        self.lcm = lcm
+        self.puv = puv
+
+
 class LaunchInterceptorConditions:
     """Launch Interceptor Conditions class
 
