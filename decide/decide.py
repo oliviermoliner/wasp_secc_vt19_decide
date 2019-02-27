@@ -16,6 +16,30 @@ class Decide:
         self.lcm = lcm
         self.puv = puv
 
+    def compute_preliminary_unlocking_matrix(self, cmv):
+        """ Computes the Preliminary Unlocking Matrix
+
+        Uses the Conditions Met Vector in conjunction with the Logical Connector Matrix
+        to form the Preliminary Unlocking Matrix (PUM)
+
+        Args:
+            points (list): List of coordinates of data points
+
+        Returns
+            list: The PUM as a 2-d list of booleans
+        """
+        pum = [[None] * 15 for i in range(15)]
+
+        for row in range(15):
+            for column in range(15):
+                if self.lcm[row][column] == "ANDD":
+                    pum[row][column] = cmv[row] and cmv[column]
+                elif self.lcm[row][column] == "ORR":
+                    pum[row][column] = cmv[row] or cmv[column]
+                else:
+                    pum[row][column] = True
+        return pum
+
 
 class LaunchInterceptorConditions:
     """Launch Interceptor Conditions class
