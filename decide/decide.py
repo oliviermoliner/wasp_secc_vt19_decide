@@ -7,8 +7,8 @@ class Decide:
 
     Attributes:
         parameters (dict): Parameters for the LICs
-        lcm (list): Logical Connector Matrix
-        puv (list): Preliminary Unlocking Vector
+        lcm (array): Logical Connector Matrix
+        puv (array): Preliminary Unlocking Vector
     """
 
     def __init__(self, parameters, lcm, puv):
@@ -23,10 +23,10 @@ class Decide:
         to form the Preliminary Unlocking Matrix (PUM)
 
         Args:
-            points (list): List of coordinates of data points
+            points (array): List of coordinates of data points
 
         Returns
-            list: The PUM as a 2-d list of booleans
+            array: The PUM as a 2-d array of booleans
         """
         pum = [[None] * 15 for i in range(15)]
 
