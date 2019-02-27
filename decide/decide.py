@@ -40,6 +40,24 @@ class Decide:
                     pum[row][column] = True
         return pum
 
+    def compute_final_unlocking_vector(self, pum):
+        """ Computes the Final Unlocking Vector
+
+        Uses the Preliminary Unlocking Matrix (PUM) in conjunction with the Preliminary
+        Unlocking Vector to compute the Final Unlocking Vector
+
+        Args:
+            pum (array): The Preliminary Unlocking Matrix
+
+        Returns
+            array: The Final Unlocking Vector
+        """
+        fuv = [False for i in range(15)]
+        for row in range(15):
+            if self.puv[row] is False or all(pum[row]):
+                fuv[row] = True
+        return fuv
+
 
 class LaunchInterceptorConditions:
     """Launch Interceptor Conditions class
