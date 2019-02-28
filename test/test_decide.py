@@ -1,6 +1,84 @@
 import pytest
+import math
 
 from decide import decide
+
+
+@pytest.mark.parametrize(
+    "parameters, lcm, puv, points, expected_decision",
+    [
+        (
+            {
+                "length1": 2,
+                "epsilon": math.pi / 2,
+                "area1": 2,
+                "radius1": 1,
+                "q_pts": 3,
+                "quads": 1,
+                "n_pts": 3,
+                "dist": 1.5,
+            },
+            [["ORR"] * 15] * 15,
+            [
+                True,
+                True,
+                True,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+            ],
+            [[0, 0], [1, 0], [2, 0], [3, 0], [3, 3]],
+            True,
+        ),
+        (
+            {
+                "length1": 2,
+                "epsilon": math.pi / 2,
+                "area1": 2,
+                "radius1": 1,
+                "q_pts": 3,
+                "quads": 1,
+                "n_pts": 3,
+                "dist": 1.5,
+            },
+            [["ANDD"] * 15] * 15,
+            [
+                True,
+                True,
+                True,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+                False,
+            ],
+            [[0, 0], [1, 0], [2, 0], [3, 0], [3, 3]],
+            False,
+        ),
+    ],
+)
+def test_decide(parameters, lcm, puv, points, expected_decision):
+    """
+    Verify that the decide function returns expected values
+    """
+    decider = decide.Decide(parameters, lcm, puv)
+    assert decider.decide(points) == expected_decision
 
 
 @pytest.mark.parametrize(
