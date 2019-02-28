@@ -15,6 +15,25 @@ class Decide:
         self.parameters = parameters
         self.lcm = lcm
         self.puv = puv
+        self.lic = LaunchInterceptorConditions(self.parameters)
+
+    def decide(self, points):
+        """ Computes launch decision
+
+        Generates a boolean signal which determines whether an interceptor should be
+        launched based upon input radar tracking information.
+
+        Args:
+            points (array): List of coordinates of data points
+
+        Returns
+            boolean: The launch decision
+        """
+        cmv = self.lic.get_conditions_met_vector(points)
+        pum = self.compute_preliminary_unlocking_matrix(cmv)
+        fuv = self.compute_final_unlocking_vector(pum)
+        launch = all(fuv)
+        return launch
 
     def compute_preliminary_unlocking_matrix(self, cmv):
         """ Computes the Preliminary Unlocking Matrix
