@@ -51,12 +51,9 @@ class Decide:
 
         for row in range(15):
             for column in range(15):
-                if self.lcm[row][column] == "ANDD":
-                    pum[row][column] = cmv[row] and cmv[column]
-                elif self.lcm[row][column] == "ORR":
-                    pum[row][column] = cmv[row] or cmv[column]
-                else:
-                    pum[row][column] = True
+                pum[row][column] = LogicalConnector.create_from_string(
+                    self.lcm[row][column]
+                ).apply(cmv[row], cmv[column])
         return pum
 
     def compute_final_unlocking_vector(self, pum):
@@ -76,6 +73,74 @@ class Decide:
             if self.puv[row] is False or all(pum[row]):
                 fuv[row] = True
         return fuv
+
+
+class LogicalConnector:
+    @staticmethod
+    def create_from_string(string):
+        if string == "ANDD":
+            return AnddConnector()
+        elif string == "ORR":
+            return OrrConnector()
+        elif string == "NOT_USED":
+            return NotUsedConnector()
+        else:
+            raise ValueError("unknown operator %s" % (string))
+        return LogicalConnector()
+
+    def apply(self, operand1, operand2):
+        return False
+
+
+class AnddConnector(LogicalConnector):
+    def apply(self, operand1, operand2):
+        """ Apply a logical AND between the operands
+
+        Args:
+            operand1 (boolean): First operand
+            operand2 (boolean): Second operand
+
+        Returns
+            boolean: Result of the operation
+        """
+        return operand1 and operand2
+
+    def __str__(self):
+        return "ANDD"
+
+
+class OrrConnector(LogicalConnector):
+    def apply(self, operand1, operand2):
+        """ Apply a logical OR between the operands
+
+        Args:
+            operand1 (boolean): First operand
+            operand2 (boolean): Second operand
+
+        Returns
+            boolean: Result of the operation
+        """
+        return operand1 or operand2
+
+    def __str__(self):
+        return "ORR"
+
+
+class NotUsedConnector(LogicalConnector):
+    def apply(self, operand1, operand2):
+        """ Always return True
+
+        Args:
+            operand1 (boolean): First operand
+            operand2 (boolean): Second operand
+
+        Returns
+            boolean: True
+        """
+        return True
+
+    def __str__(self):
+        return "NOT_USED"
 
 
 class LaunchInterceptorConditions:
