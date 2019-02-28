@@ -1,6 +1,8 @@
 import math
 import numpy as np
 
+NUMBER_OF_LICS = 15
+
 
 class Decide:
     """Decide class
@@ -47,10 +49,10 @@ class Decide:
         Returns
             array: The PUM as a 2-d array of booleans
         """
-        pum = [[None] * 15 for i in range(15)]
+        pum = [[None] * NUMBER_OF_LICS for i in range(NUMBER_OF_LICS)]
 
-        for row in range(15):
-            for column in range(15):
+        for row in range(NUMBER_OF_LICS):
+            for column in range(NUMBER_OF_LICS):
                 pum[row][column] = LogicalConnector.create_from_string(
                     self.lcm[row][column]
                 ).apply(cmv[row], cmv[column])
@@ -68,8 +70,8 @@ class Decide:
         Returns
             array: The Final Unlocking Vector
         """
-        fuv = [False for i in range(15)]
-        for row in range(15):
+        fuv = [False for i in range(NUMBER_OF_LICS)]
+        for row in range(NUMBER_OF_LICS):
             if self.puv[row] is False or all(pum[row]):
                 fuv[row] = True
         return fuv
@@ -168,7 +170,7 @@ class LaunchInterceptorConditions:
         Returns
             list: The CMV as a list of booleans
         """
-        cmv = [False] * 15
+        cmv = [False] * NUMBER_OF_LICS
 
         cmv[0] = self.lic_0(points)
         cmv[1] = self.lic_1(points)

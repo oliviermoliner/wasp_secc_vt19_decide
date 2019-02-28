@@ -18,7 +18,7 @@ from decide import decide
                 "n_pts": 3,
                 "dist": 1.5,
             },
-            [["ORR"] * 15] * 15,
+            [["ORR"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
             [
                 True,
                 True,
@@ -50,7 +50,7 @@ from decide import decide
                 "n_pts": 3,
                 "dist": 1.5,
             },
-            [["ANDD"] * 15] * 15,
+            [["ANDD"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
             [
                 True,
                 True,
@@ -84,7 +84,11 @@ def test_decide(parameters, lcm, puv, points, expected_decision):
 @pytest.mark.parametrize(
     "cmv, lcm, expected_pum",
     [
-        ([False] * 15, [["NOT_USED"] * 15] * 15, [[True] * 15] * 15),
+        (
+            [False] * decide.NUMBER_OF_LICS,
+            [["NOT_USED"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
+            [[True] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
+        ),
         (
             [
                 False,
@@ -103,7 +107,7 @@ def test_decide(parameters, lcm, puv, points, expected_decision):
                 False,
                 True,
             ],
-            [["ORR"] * 15] * 15,
+            [["ORR"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
             [
                 [
                     False,
@@ -380,7 +384,7 @@ def test_decide(parameters, lcm, puv, points, expected_decision):
                 False,
                 True,
             ],
-            [["ANDD"] * 15] * 15,
+            [["ANDD"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
             [
                 [
                     False,
@@ -654,7 +658,11 @@ def test_pum(cmv, lcm, expected_pum):
     "puv, pum, expected_fuv",
     [
         # If all elements of the PUV are False, all elements of FUV should be True
-        ([False] * 15, [[False] * 15] * 15, [True] * 15),
+        (
+            [False] * decide.NUMBER_OF_LICS,
+            [[False] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
+            [True] * decide.NUMBER_OF_LICS,
+        ),
         (
             [
                 False,
@@ -930,7 +938,7 @@ def test_pum(cmv, lcm, expected_pum):
                     True,
                 ],
             ],
-            [True] * 15,
+            [True] * decide.NUMBER_OF_LICS,
         ),
         (
             [
