@@ -1242,3 +1242,22 @@ def test_fuv(puv, pum, expected_fuv):
     """
     decider = decide.Decide({}, [], puv)
     assert decider.compute_final_unlocking_vector(pum) == expected_fuv
+
+
+@pytest.mark.parametrize(
+    "float1, float2, epsilon, expected",
+    [
+        (1, 1, 1e-100, True),
+        (1.5, 1.5, 1e-100, True),
+        (math.pi / 2, math.pi / 2, 1e-100, True),
+        (math.pi / 2, 1.5707963267948, 0.00000001, True),
+        (math.pi / 2, 1.5707963, 0.00000001, False),
+        (math.pi / 2, 1.57, 0.0001, False),
+        (math.pi / 2, 1.57, 0.001, True),
+    ],
+)
+def test_float_almost_equal(float1, float2, epsilon, expected):
+    """
+    Verify that the test_float_almost_equal function returns expected values
+    """
+    assert decide.float_almost_equal(float1, float2, epsilon) is expected
