@@ -6,7 +6,20 @@ from decide import decide
 
 @pytest.mark.parametrize(
     "coordinates, expected_quadrant",
-    [([0, 0], 1), ([-1, 0], 2), ([0, -1], 3), ([0, 1], 1), ([1, 0], 1), ([1, -1], 4)],
+    [
+        # Point belongs to all quadrants and should be assigned to quadrant I
+        ([0, 0], 1),
+        # Point belongs to quandrants II and III and should be assigned to quadrant II
+        ([-1, 0], 2),
+        # Point belongs to quandrants III and IV and should be assigned to quadrant III
+        ([0, -1], 3),
+        # Point belongs to quandrants I and IV and should be assigned to quadrant I
+        ([0, 1], 1),
+        # Point belongs to quandrants I and II and should be assigned to quadrant I
+        ([1, 0], 1),
+        # Point belongs to quadrant IV
+        ([1, -1], 4),
+    ],
 )
 def test_quadrant(coordinates, expected_quadrant):
     """

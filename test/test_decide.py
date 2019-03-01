@@ -7,6 +7,7 @@ from decide import decide
 @pytest.mark.parametrize(
     "parameters, lcm, puv, points, expected_decision",
     [
+        # This configuration should generate a launch decision
         (
             {
                 "length1": 2,
@@ -39,6 +40,7 @@ from decide import decide
             [[0, 0], [1, 0], [2, 0], [3, 0], [3, 3]],
             True,
         ),
+        # This configuration should NOT generate a launch decision
         (
             {
                 "length1": 2,
@@ -84,11 +86,13 @@ def test_decide(parameters, lcm, puv, points, expected_decision):
 @pytest.mark.parametrize(
     "cmv, lcm, expected_pum",
     [
+        # Edge case: If the LCM is all NOT_USED, the PUM should be all True
         (
             [False] * decide.NUMBER_OF_LICS,
             [["NOT_USED"] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
             [[True] * decide.NUMBER_OF_LICS] * decide.NUMBER_OF_LICS,
         ),
+        # Nominal case
         (
             [
                 False,
@@ -366,6 +370,7 @@ def test_decide(parameters, lcm, puv, points, expected_decision):
                 ],
             ],
         ),
+        # Nominal case
         (
             [
                 False,
